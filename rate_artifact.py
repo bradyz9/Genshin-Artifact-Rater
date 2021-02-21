@@ -180,12 +180,14 @@ def rate(level, results, options={}, lang=tr.en()):
 				 f'{lang.hp}%': 46.6, f'{lang.df}%': 58.3, f'{lang.heal}%': 35.9}
 	max_subs = {lang.atk: 19.0, lang.em: 23.0, f'{lang.er}%': 6.5, f'{lang.atk}%': 5.8,
 				f'{lang.cr}%': 3.9, f'{lang.cd}%': 7.8, lang.df: 23.0, lang.hp: 299.0, f'{lang.df}%': 7.3, f'{lang.hp}%': 5.8}
-	weights = {lang.hp: 0, lang.atk: 0.5, f'{lang.atk}%': 1, f'{lang.er}%': 0.5, lang.em: 0.5,
+	main_weights = {lang.hp: 1, lang.atk: 1, f'{lang.atk}%': 1, f'{lang.er}%': 0.7, lang.em: 0.4,
 			   f'{lang.phys}%': 1, f'{lang.cr}%': 1, f'{lang.cd}%': 1, f'{lang.elem}%': 1,
 			   f'{lang.hp}%': 0, f'{lang.df}%': 0, lang.df: 0, f'{lang.heal}%': 0}
+	sub_weights = {lang.hp: 0, lang.atk: 0.1, f'{lang.atk}%': 1, f'{lang.er}%': 0.7, lang.em: 0.4, f'{lang.cr}%': 1,
+			   f'{lang.cd}%': 1, f'{lang.hp}%': 0, f'{lang.df}%': 0, lang.df: 0}
 
 	# Replaces weights with options
-	weights = {**weights, **options}
+	sub_weights = {**sub_weights, **options}
 
 	for result in results:
 		stat, value = result
@@ -194,11 +196,11 @@ def rate(level, results, options={}, lang=tr.en()):
 			main = False
 			max_main = max_mains[key] - (max_mains[key] - min_mains[key]) * (1 - level / 20.0)
 			value = validate(value, max_main, '%' in key)
-			main_score = value / max_main * weights[key] * main_weight
+			main_score = value / max_main * main_weights[key] * main_weight
 			if key in [lang.atk, lang.hp]:
-				main_weight *= weights[key]
+				main_weight *= main_weights[key]
 			count = 0
-			for k,v in sorted(weights.items(), reverse=True, key=lambda item: item[1]):
+			for k,v in sorted(sub_weights.items(), reverse=True, key=lambda item: item[1]):
 				if k == key or k not in max_subs:
 					continue
 				if count == 0:
@@ -210,7 +212,7 @@ def rate(level, results, options={}, lang=tr.en()):
 					break
 		else:
 			value = validate(value, max_subs[key] * 6, '%' in key)
-			sub_score += value / max_subs[key] * weights[key]
+			sub_score += value / max_subs[key] * sub_weights[key]
 		result[1] = value
 
 	score = (main_score + sub_score) / (main_weight + sub_weight) * 100 if main_weight + sub_weight > 0 else 100

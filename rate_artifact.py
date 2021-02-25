@@ -186,11 +186,16 @@ def rate(piece, level, results, options={}, lang=tr.en()):
 				 f'{lang.hp}%': 46.6, f'{lang.df}%': 58.3, f'{lang.heal}%': 35.9}
 	max_subs = {lang.atk: 19.0, lang.em: 23.0, f'{lang.er}%': 6.5, f'{lang.atk}%': 5.8,
 				f'{lang.cr}%': 3.9, f'{lang.cd}%': 7.8, lang.df: 23.0, lang.hp: 299.0, f'{lang.df}%': 7.3, f'{lang.hp}%': 5.8}
-	main_weights = {lang.hp: 1, lang.atk: 1, f'{lang.atk}%': 1, f'{lang.er}%': 0.7, lang.em: 0.4,
-			   f'{lang.phys}%': 1, f'{lang.cr}%': 1, f'{lang.cd}%': 1, f'{lang.elem}%': 1,
-			   f'{lang.hp}%': 0, f'{lang.df}%': 0, lang.df: 0, f'{lang.heal}%': 0}
+	typed_weights = {
+		"Flower": {lang.hp: 1},
+		"Plume": {lang.atk: 1},
+		"Sands": {f'{lang.atk}%': 1, f'{lang.er}%': 0.6, lang.em: 0, f'{lang.hp}%': 0, f'{lang.df}%': 0},
+		"Goblet": {f'{lang.atk}%': 0.6, lang.em: 0, f'{lang.phys}%': 1, f'{lang.elem}%': 1, f'{lang.hp}%': 0, f'{lang.df}%': 0},
+		"Circlet": {f'{lang.atk}%': 0.7, lang.em: 0, f'{lang.cr}%': 1, f'{lang.cd}%': 1, f'{lang.hp}%': 0, f'{lang.df}%': 0, f'{lang.heal}%': 0}
+	}
 	sub_weights = {lang.hp: 0, lang.atk: 0.1, f'{lang.atk}%': 1, f'{lang.er}%': 0.7, lang.em: 0.4, f'{lang.cr}%': 1,
 			   f'{lang.cd}%': 1, f'{lang.hp}%': 0, f'{lang.df}%': 0, lang.df: 0}
+	main_weights = typed_weights[piece]
 
 	# Replaces weights with options
 	sub_weights = {**sub_weights, **options}

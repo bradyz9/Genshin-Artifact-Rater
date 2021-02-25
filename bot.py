@@ -380,8 +380,8 @@ async def rate(ctx):
 	else:
 		color = discord.Color.orange()
 
-	msg = f'\n\n**{results[0][0]}: {results[0][1]}**'
-	msg += f'\nPiece: {piece}'
+	msg = f'\n\nPiece: {piece}'
+	msg += f'\n\n**{results[0][0]}: {results[0][1]}**'
 	for result in results[1:]:
 		msg += f'\n{result[0]}: {result[1]}'
 	msg += f'\n\n**{lang.score}: {int(score * (main_weight + sub_weight))} ({score:.2f}%)**'

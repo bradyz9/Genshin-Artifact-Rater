@@ -346,12 +346,12 @@ async def rate(ctx):
 					app.restart()
 				return
 
-			level, results = ra.parse(text, lang)
+			piece, level, results = ra.parse(text, lang)
 			if lang.lvl in options:
 				level = int(options[lang.lvl])
 			elif level == None:
 				level = 20
-			score, main_score, main_weight, sub_score, sub_weight = ra.rate(level, results, options, lang)
+			score, main_score, main_weight, sub_score, sub_weight = ra.rate(piece, level, results, options, lang)
 			crashes = 0
 			break
 
@@ -381,12 +381,12 @@ async def rate(ctx):
 		color = discord.Color.orange()
 
 	msg = f'\n\n**{results[0][0]}: {results[0][1]}**'
+	msg += f'\nPiece: {piece}'
 	for result in results[1:]:
 		msg += f'\n{result[0]}: {result[1]}'
 	msg += f'\n\n**{lang.score}: {int(score * (main_weight + sub_weight))} ({score:.2f}%)**'
 	msg += f'\n{lang.main_score}: {int(main_score * main_weight)} ({main_score:.2f}%)'
 	msg += f'\n{lang.sub_score}: {int(sub_score * sub_weight)} ({sub_score:.2f}%)'
-	msg += f'\n\n{lang.join}'
 
 	embed = discord.Embed(color=color)
 	embed.set_author(name=ctx.message.author.display_name, icon_url=ctx.message.author.avatar_url)

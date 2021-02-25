@@ -21,6 +21,7 @@ hp_reg = re.compile(r'\d[.,]\d{3}')
 lvl_reg = re.compile(r'^\+\d\d?$')
 bad_lvl_reg_1 = re.compile(r'^\+?\d\d?$')
 bad_lvl_reg_2 = re.compile(r'^\d{4}\d*$')
+artifact_slots = {"Flower", "Plume", "Sands", "Goblet", "Circlet"}
 
 async def ocr(url, num, lang=tr.en()):
 	if not OCR_API_KEY:
@@ -65,6 +66,7 @@ def parse(text, lang=tr.en()):
 	stat = None
 	results = []
 	level = None
+	piece = None
 	prev = None
 	del_prev = True
 
@@ -79,6 +81,10 @@ def parse(text, lang=tr.en()):
 		if del_prev:
 			prev = None
 		del_prev = True
+
+		for slot in artifact_slots:
+			if slot in line:
+				piece = slot
 
 		for k,v in lang.replace.items():
 			line = line.replace(k,v)
@@ -140,8 +146,8 @@ def parse(text, lang=tr.en()):
 			prev = reg.findall(line.replace(' ',''))
 			del_prev = False
 
-	print(level, results)
-	return level, results
+	print(piece, level, results)
+	return piece, level, results
 
 def validate(value, max_stat, percent):
 	while value > max_stat * 1.05:
@@ -163,7 +169,7 @@ def validate(value, max_stat, percent):
 		value += 10
 	return value
 
-def rate(level, results, options={}, lang=tr.en()):
+def rate(piece, level, results, options={}, lang=tr.en()):
 	main = True
 	main_score = 0.0
 	sub_score = 0.0
@@ -230,7 +236,7 @@ if __name__ == '__main__':
 	suc, text = asyncio.run(ocr(url, 2, lang))
 	print(text)
 	if suc:
-		level, results = parse(text, lang)
+		piece, level, results = parse(text, lang)
 		if level == None:
 			level = 20
-		rate(level, results, {}, lang)
+		rate(piece, level, results, {}, lang)

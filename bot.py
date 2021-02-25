@@ -373,13 +373,6 @@ async def rate(ctx):
 		await send(ctx, msg=lang.err_unknown)
 		return
 
-	if score <= 50:
-		color = discord.Color.blue()
-	elif score > 50 and score <= 75:
-		color = discord.Color.purple()
-	else:
-		color = discord.Color.orange()
-
 	msg = f'\n\nPiece: {piece}'
 	msg += f'\n\n**{results[0][0]}: {results[0][1]}**'
 	for result in results[1:]:
@@ -389,7 +382,14 @@ async def rate(ctx):
 	msg += f'\n{lang.sub_score}: {int(sub_score * sub_weight)} ({sub_score:.2f}%)'
 
 	if score <= 50:
+		color = discord.Color.blue()
 		msg += f'\n\nThis artifact is trash, chief.'
+	elif score > 50 and score <= 75:
+		color = discord.Color.purple()
+		msg += f'\n\nThis is as lukewarm as pee in a pool.'
+	else:
+		color = discord.Color.orange()
+		msg += f'\n\nCan you SMELL what The Rock is cooking?!?!'
 
 	embed = discord.Embed(color=color)
 	embed.set_author(name=ctx.message.author.display_name, icon_url=ctx.message.author.avatar_url)

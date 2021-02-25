@@ -22,6 +22,7 @@ lvl_reg = re.compile(r'^\+\d\d?$')
 bad_lvl_reg_1 = re.compile(r'^\+?\d\d?$')
 bad_lvl_reg_2 = re.compile(r'^\d{4}\d*$')
 artifact_slots = {"Flower", "Plume", "Sands", "Goblet", "Circlet"}
+dynamic_artifact_slots = {"Sands", "Goblet", "Circlet"}
 
 async def ocr(url, num, lang=tr.en()):
 	if not OCR_API_KEY:
@@ -198,6 +199,9 @@ def rate(piece, level, results, options={}, lang=tr.en()):
 	main_weights = typed_weights[piece]
 
 	# Replaces weights with options
+	if piece in dynamic_artifact_slots:
+		main_weights = {**main_weights, **options}
+
 	sub_weights = {**sub_weights, **options}
 
 	for result in results:

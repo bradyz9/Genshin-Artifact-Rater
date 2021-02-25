@@ -76,9 +76,11 @@ class translation:
 				If you are on Windows 10, you can use Shift + Windows + S, drag your cursor over the artifact stats and then paste it on discord with Ctrl + V.
 				This bot will use default weights (see below) unless you specify your own or select a preset. You can also specify the level you want to compare your artifact to.
 
-				**Default weights**
+				**Default substat weights**
 				ATK%, DMG%, Crit - 1
-				ATK, EM, Recharge – 0.5
+				ER - 0.7
+				EM - 0.4
+				ATK - 0.1
 				Everything else - 0
 
 				**Parameters**
@@ -92,7 +94,8 @@ class translation:
 				The level of the artifact to compare against, from 0 to 20. Sometimes the auto-detection for level is wrong, use this to correct it.
 
 				`weights`
-				The weights to use for rating this artifact. Each weight is of the format `<stat>=<value>`, where `value` is a number between 0 and 1.
+				The weights to use for rating this artifact. Each weight is of the format `<stat>=<value>`, where `value` is a number between 0 and 1. These optional weights
+				will only affect primary stats of artifacts that are not flowers or plumes.
 				{self.help_stats}
 
 				**Examples**

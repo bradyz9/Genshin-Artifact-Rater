@@ -388,6 +388,9 @@ async def rate(ctx):
 	msg += f'\n{lang.main_score}: {int(main_score * main_weight)} ({main_score:.2f}%)'
 	msg += f'\n{lang.sub_score}: {int(sub_score * sub_weight)} ({sub_score:.2f}%)'
 
+	if score <= 50:
+		msg += f'\n\nThis artifact is trash, chief.'
+
 	embed = discord.Embed(color=color)
 	embed.set_author(name=ctx.message.author.display_name, icon_url=ctx.message.author.avatar_url)
 	embed.add_field(name=f'{lang.art_level}: {level}', value=msg)
